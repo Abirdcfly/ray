@@ -129,6 +129,12 @@ class Test(dict):
         )
 
     @classmethod
+    def gen_from_name(cls, name: str):
+        s3_prefix = name.replace("/", "_")
+        tests = [test for test in Test.gen_from_s3(s3_prefix) if test["name"] == name]
+        return tests[0] if tests else None
+
+    @classmethod
     def gen_from_s3(cls, prefix: str):
         """
         Obtain all tests whose names start with the given prefix from s3
