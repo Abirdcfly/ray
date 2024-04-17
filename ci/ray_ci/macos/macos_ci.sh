@@ -94,6 +94,14 @@ run_ray_cpp_and_java() {
   ./ci/ci.sh test_cpp || exit 42
 }
 
+bisect() {
+  # run bisect
+  test="$1"
+  passing_revision="$2"
+  failing_revision="$3"
+  bazel run //ci/ray_ci/bisect:bisect_test -- "$test" "$passing_revision" "$failing_revision"
+}
+
 _prelude() {
   rm -rf /tmp/bazel_event_logs
   (which bazel && bazel clean) || true;

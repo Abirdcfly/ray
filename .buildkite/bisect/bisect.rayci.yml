@@ -1,0 +1,11 @@
+group: bisect
+depends_on: 
+  - forge
+steps:
+  - name: macos test
+    commands:
+      - if [[ $$RAYCI_BISECT_TEST_TYPE != "macos-test" ]]; then exit 0; fi
+      - MINIMAL_INSTALL=1 ./ci/ray_ci/macos/macos_ci.sh bisect $$RAYCI_BISECT_TEST_NAME $$RAYCI_BISECT_PASSING_COMMIT $$RAYCI_BISECT_FAILING_COMMIT
+    job_env: MACOS
+    instance_type: macos
+    priority: 10
