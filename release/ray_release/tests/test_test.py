@@ -17,9 +17,14 @@ from ray_release.test import (
     Test,
     TestResult,
     TestState,
+    TestType,
     _convert_env_list_to_dict,
     DATAPLANE_ECR_REPO,
     DATAPLANE_ECR_ML_REPO,
+    MACOS_TEST_PREFIX,
+    LINUX_TEST_PREFIX,
+    WINDOWS_TEST_PREFIX,
+    MACOS_BISECT_DAILY_RATE_LIMIT,
 )
 
 
@@ -219,6 +224,28 @@ def test_gen_from_name(mock_gen_from_s3) -> None:
     ]
 
     assert Test.gen_from_name("good").get_name() == "good"
+
+
+def test_get_test_type() -> None:
+    assert (
+        _stub_test({"name": f"{LINUX_TEST_PREFIX}_test"}).get_test_type()
+        == TestType.LINUX_TEST
+    )
+    assert (
+        _stub_test({"name": f"{MACOS_TEST_PREFIX}_test"}).get_test_type()
+        == TestType.MACOS_TEST
+    )
+    assert (
+        _stub_test({"name": f"{WINDOWS_TEST_PREFIX}_test"}).get_test_type()
+        == TestType.WINDOWS_TEST
+    )
+    assert _stub_test({"name": "release_test"}).get_test_type() == TestType.RELEASE_TEST
+
+
+def test_get_bisect_daily_rate_limit() -> None:
+    assert (
+        _stub_test({"name": f"{MACOS_TEST_PREFIX}_test"}).get_bisect_daily_rate_limit()
+    ) == MACOS_BISECT_DAILY_RATE_LIMIT
 
 
 if __name__ == "__main__":

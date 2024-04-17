@@ -287,7 +287,7 @@ class TestStateMachine(abc.ABC):
             message=f"[ray-test-bot] {self.test.get_name()} failing",
             env={
                 "UPDATE_TEST_STATE_MACHINE": "1",
-                "RAYCI_TEST_TYPE": self.test.get_type().value,
+                "RAYCI_TEST_TYPE": self.test.get_test_type().value,
             },
         )
         failing_commit = self.test_results[0].commit
